@@ -1,8 +1,7 @@
 #include <stdio.h>
 /**
-*main - data input
-*
-*return: value 
+*main - Entry point
+*Return: Always 0 (Success)
  */
 int main(void)
 {
