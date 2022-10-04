@@ -23,7 +23,7 @@ int main(void)
 
 	while (m <= 'Z')
 	{
-		putchar(m + '$');
+		putchar(m);
 		m++;
 	}
 	putchar('\n');
