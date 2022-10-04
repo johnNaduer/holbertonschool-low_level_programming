@@ -1,10 +1,9 @@
 #include <stdio.h>
 /**
-*main is the primary function
+*main - data input
 *
-*return 0 all good
+*return: value 
  */
-
 int main(void)
 {
 	puts("\"Programming is like building a multilingual puzzle");
