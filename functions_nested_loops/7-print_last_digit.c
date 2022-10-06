@@ -2,7 +2,13 @@
 
 int print_last_digit(int x)
 {
-	int r;
-	r=_putchar(x%10+'0');
-	return r;
+	if(x%10>=0)
+	{
+	_putchar(x%10+'0');
+	return 1;
+	}
+	else
+	{
+	return -1;
+	}
 }
