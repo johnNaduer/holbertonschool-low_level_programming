@@ -1,8 +1,8 @@
 #include "main.h"
 /**
- * main - check the code
- *
- * Return: Always 0.
+ * _abs - computes the absolute value of number
+ *@x: is the input as an integer
+ * Return: Always x or -x.
  */
 int _abs(int x)
 {
@@ -14,5 +14,5 @@ int _abs(int x)
 	{
 		return (x * -1);
 	}
-	
+
 }
