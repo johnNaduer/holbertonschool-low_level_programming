@@ -1,8 +1,8 @@
 #include "main.h"
 /**
- * main - check the code
+ * jack_bauer - prints minutes and hours
  *
- * Return: Always 0.
+ * Return: there is no return
  */
 void jack_bauer(void)
 {
