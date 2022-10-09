@@ -6,7 +6,8 @@
 int main(void)
 {
 	int j;
-	j=1;
+
+	j = 1;
 	printf("%d", j);
 	for (j = 2 ; j < 101; j++)
 	{
@@ -18,13 +19,13 @@ int main(void)
 	{
 	if (j % 3 == 0)
 	{
-		printf(" Fizz ");
+		printf(" Fizz");
 	}
 	else
 	{
 	if (j % 5 == 0)
 	{
-		printf(" Buzz ");
+		printf(" Buzz");
 	}
 	else
 	{
