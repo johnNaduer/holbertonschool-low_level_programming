@@ -9,7 +9,13 @@ int main(void)
 
 	for (j = 1 ; j < 101; j++)
 	{
-		if (j % 3 == 0)
+		if (j % 15 == 0)
+	{
+		printf("FizzBuzz ");
+	}
+	else
+	{
+	if (j % 3 == 0)
 	{
 		printf("Fizz ");
 	}
@@ -18,12 +24,6 @@ int main(void)
 	if (j % 5 == 0)
 	{
 		printf("Buzz ");
-	}
-	else
-	{
-	if (j % 15 == 0)
-	{
-		printf("FizzBuzz ");
 	}
 	else
 	{
