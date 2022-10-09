@@ -6,28 +6,29 @@
 int main(void)
 {
 	int j;
-
-	for (j = 1 ; j < 101; j++)
+	j=1;
+	printf("%d", j);
+	for (j = 2 ; j < 101; j++)
 	{
 		if (j % 15 == 0)
 	{
-		printf("FizzBuzz ");
+		printf(" FizzBuzz");
 	}
 	else
 	{
 	if (j % 3 == 0)
 	{
-		printf("Fizz ");
+		printf(" Fizz ");
 	}
 	else
 	{
 	if (j % 5 == 0)
 	{
-		printf("Buzz ");
+		printf(" Buzz ");
 	}
 	else
 	{
-		printf("%d ", j);
+		printf(" %d", j);
 	}
 	}
 
