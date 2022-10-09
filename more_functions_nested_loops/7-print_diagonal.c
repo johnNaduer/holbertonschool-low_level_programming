@@ -5,24 +5,20 @@
  * Return: no return
 */
 void print_diagonal(int n)
-	{
+{
 	int j, i;
 
 	if (n > 0)
 	{
-	for (j = 0; j < n; j++)
+	for (j = 1; j <= n; j++)
 	{
-	for (i = 0; i < n; i++)
+	for (i = 1; i < j; i++)
 	{
-		if (i == j)
-	{
-		_putchar('\\');
-	}
-	else
-	{
+	
 		_putchar(' ');
 	}
-	}
+
+		_putchar('\\');
 		_putchar('\n');
 	}
 	}
@@ -30,4 +26,4 @@ void print_diagonal(int n)
 	{
 		_putchar('\n');
 	}
-	}
+}
