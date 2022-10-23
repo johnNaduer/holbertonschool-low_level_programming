@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 /**
  * main - enter the arguments
  * @argc: input integer
@@ -8,23 +9,20 @@
  */
 int main(int argc, char *argv[])
 {
-	int a = 0, n, m;
+	int i, j, suma = 0;
 
-	for (n = 1; n < argc; n++)
+	for (i = 1; i < argc; i++)
 	{
-		for (m = 0; argv[n][m]; m++)
+	for (j = 0; argv[i][j] != '\0'; j++)
+	{
+		if (!isdigit(argv[i][j]))
 		{
-			if (isdigit(argv[n][m]) == 0)
-			{
-				puts("Error");
-				return (1);
-			}
+			printf("Error\n");
+			return (1);
 		}
+		}
+		suma += atoi(argv[i]);
 	}
-	for (n = 1; n < argc; n++)
-	{
-		a += atoi(argv[n]);
-	}
-	printf("%d\n", a);
+	printf("%d\n", suma);
 	return (0);
 }
