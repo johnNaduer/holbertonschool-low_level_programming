@@ -1,28 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 /**
- * main - Entry Point
- * @argc: arguments
- * @argv: array pointing to arguments
- * Return: 0
+ * main - enter the arguments
+ * @argc: input integer
+ * @argv: input char
+ * Return: Always 0
  */
 int main(int argc, char *argv[])
 {
-	int i, suma = 0;
+	int a = 0, n, m;
 
-	if (argc < 1)
-		return (0);
-
-	for (i = 1; i < argc; i++)
+	for (n = 1; n < argc; n++)
 	{
-		if (!atoi(argv[i]))
+		for (m = 0; argv[n][m]; m++)
 		{
-			printf("%s\n", "Error");
-			return (1);
+			if (isdigit(argv[n][m]) == 0)
+			{
+				puts("Error");
+				return (1);
+			}
 		}
-		suma += atoi(argv[i]);
 	}
-	printf("%d\n", suma);
-
+	for (n = 1; n < argc; n++)
+	{
+		a += atoi(argv[n]);
+	}
+	printf("%d\n", a);
 	return (0);
 }
