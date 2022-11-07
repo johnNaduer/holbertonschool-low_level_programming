@@ -3,9 +3,9 @@
 #include "variadic_functions.h"
 
 /**
- * printf_char - printfs a char from var args
+ * printf_char - printfs a char
  *
- * @list: va_list to print from
+ * @list: input va_list
  *
  * Return: void
  */
@@ -15,9 +15,9 @@ void printf_char(va_list list)
 }
 
 /**
- * printf_int - printfs an int from var args
+ * printf_int - printfs an int
  *
- * @list: va_list to print from
+ * @list: input va_list
  *
  * Return: void
  */
@@ -27,9 +27,9 @@ void printf_int(va_list list)
 }
 
 /**
- * printf_float - printfs a float from var args
+ * printf_float - printfs a float
  *
- * @list: va_list to print from
+ * @list: input va_list
  *
  * Return: void
  */
@@ -39,9 +39,9 @@ void printf_float(va_list list)
 }
 
 /**
- * printf_string - printfs a string from var args
+ * printf_string - printfs a string
  *
- * @list: va_list to print from
+ * @list: input va_list
  *
  * Return: void
  */
@@ -59,38 +59,38 @@ void printf_string(va_list list)
 
 
 /**
- * print_all - prints various types given a format string for the arguments
+ * print_all - function that prints anything
  *
- * @format: string containing type information for args
+ * @format: input const char
  *
  * Return: void
  */
 void print_all(const char * const format, ...)
 {
-	const char *ptr;
-	va_list list;
-	funckey key[4] = { {printf_char, 'c'}, {printf_int, 'i'},
+	const char *p;
+	va_list _list;
+	function key[4] = { {printf_char, 'c'}, {printf_int, 'i'},
 			   {printf_float, 'f'}, {printf_string, 's'} };
 	int keyind = 0, notfirst = 0;
 
-	ptr = format;
-	va_start(list, format);
-	while (format != NULL && *ptr)
+	p = format;
+	va_start(_list, format);
+	while (format != NULL && *p)
 	{
-		if (key[keyind].spec == *ptr)
+		if (key[keyind].spec == *p)
 		{
 			if (notfirst)
 				printf(", ");
 			notfirst = 1;
-			key[keyind].f(list);
-			ptr++;
+			key[keyind].f(_list);
+			p++;
 			keyind = -1;
 		}
 		keyind++;
-		ptr += keyind / 4;
+		p += keyind / 4;
 		keyind %= 4;
 	}
 	printf("\n");
 
-	va_end(list);
+	va_end(_list);
 }
