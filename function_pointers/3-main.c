@@ -8,7 +8,7 @@
  * @ac: input int ac
  * @av: input char av
  *
- * Return: 0 
+ * Return: 0
  */
 int main(int ac, char *av[])
 {
