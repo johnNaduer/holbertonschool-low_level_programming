@@ -3,7 +3,11 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <unistd.h>
+
 char *cargar_texto(char *buf,size_t len);
+char **toukenizar_lectura(char *lectura, char separador[]);
+void proceso_hijo(char **toukenizado);
 
 char *cargar_texto(char *buf,size_t len)
 {
@@ -36,7 +40,40 @@ char **toukenizar_lectura(char *lectura, char separador[])
 	token = strtok(NULL,separador);
 	i++;
 	}
+	
+	return (guardar_argumentos);
 }
+
+void proceso_hijo(char **toukenizado)
+{
+	pid_t child_pid;
+	
+	child_pid = fork();
+
+	if (child_pid == -1)
+        {
+                perror("Error:");
+                //return (1);
+        }
+
+	if (child_pid == 0)
+	{
+
+	if (execve(toukenizado[0],toukenizado,NULL) == -1)
+	{
+	free(toukenizado);
+	exit(EXIT_FAILURE);
+                        //perror("Error:");
+	}	
+	}
+
+	else
+	{
+		wait(NULL);
+                
+	}
+}
+
 
 
 int main(void)
@@ -46,6 +83,7 @@ int main(void)
         size_t len = 0;
 	char **toukenizado;
 	char separador[]=" ,\t\n";
+		
 
 while (1)
 {
@@ -54,9 +92,11 @@ while (1)
 
         lectura = cargar_texto(buffer,len);
 	
+	
+
 	toukenizado = toukenizar_lectura(lectura,separador);
 
-			
+	proceso_hijo(toukenizado);				
 	
 
 }
