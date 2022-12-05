@@ -7,7 +7,13 @@
 
 char *cargar_texto(char *buf,size_t len);
 char **toukenizar_lectura(char *lectura, char separador[]);
+char *evaluar(char *primer_argumento);
 void proceso_hijo(char **toukenizado);
+
+typedef struct dato
+{
+char *comandos;
+} dato1;
 
 char *cargar_texto(char *buf,size_t len)
 {
@@ -74,7 +80,13 @@ void proceso_hijo(char **toukenizado)
 	}
 }
 
+char *evaluar(char *primer_argumento)
+{
 
+
+
+
+}
 
 int main(void)
 {
@@ -83,7 +95,7 @@ int main(void)
         size_t len = 0;
 	char **toukenizado;
 	char separador[]=" ,\t\n";
-		
+	char *evaluar_primer_argumento;
 
 while (1)
 {
@@ -91,14 +103,13 @@ while (1)
         printf("$ ");
 
         lectura = cargar_texto(buffer,len);
-	
-	
-
+		
 	toukenizado = toukenizar_lectura(lectura,separador);
+
+	evaluar_primer_argumento = evaluar(toukenizado[0]);
 
 	proceso_hijo(toukenizado);				
 	
-
 }
 
 free(lectura);
