@@ -8,7 +8,7 @@
 
 char *cargar_texto(char *buf,size_t len);
 char **toukenizar_lectura(char *lectura, char separador[]);
-char **evaluar(char **primer_argumento);
+char *evaluar(char *primer_argumento);
 void proceso_hijo(char **evaluar_primer_argumento);
 char *localizar_path();
 
@@ -84,37 +84,34 @@ void proceso_hijo(char **evaluar_primer_argumento)
 	}
 }
 
-char **evaluar(char **primer_argumento)
+char *evaluar(char *primer_argumento)
 {
 	struct stat st;
 	
-	char **listas_de_path;
-	char *path_1;
+	char **listas_de_path = NULL;
+	char *path_1=NULL;
 	char separador_1[] = ":";
-	char *concatenar_path;
+	char *construir_path = NULL;
 	int len_primer_argumento;
-	path_1 = getenv("PATH");
-	
+	path_1 = localizar_path();
 	listas_de_path = toukenizar_lectura(path_1,separador_1);
 	
 	int i=0;
 	
 	for(i=0;listas_de_path[i]!=NULL;i++)
 	{
-	len_primer_argumento = strlen(primer_argumento[0]);
-	concatenar_path = malloc((strlen(listas_de_path[i]) + len_primer_argumento + 2)*sizeof(char));
-	strcpy(concatenar_path, listas_de_path[i]);
-	strcat(concatenar_path,"/");
-	strcat(concatenar_path, primer_argumento[0]);
-	if(stat(concatenar_path, &st) == 0)
+	len_primer_argumento = strlen(primer_argumento);
+	construir_path = malloc((strlen(listas_de_path[i]) + len_primer_argumento + 2)*sizeof(char));
+	strcpy(construir_path, listas_de_path[i]);
+	strcat(construir_path,"/");
+	strcat(construir_path, primer_argumento);
+	if(stat(construir_path, &st) == 0)
 	{
 		break;
 	}
-	free(concatenar_path);
-	concatenar_path = strdup(primer_argumento[0]);
+	construir_path = strdup(primer_argumento);
 	}
-
-	return (primer_argumento);	
+	return (construir_path);	
 
 }
 
@@ -128,9 +125,7 @@ char *localizar_path()
 	strncpy(path_0,environ[i],4);
 	if(!strcmp(path_0,"PATH"))
 	{
-	buscar_path = strdup(path_0);
-	printf("%s\n",environ[i]);
-	printf("%s\n",path_0);
+	buscar_path = strdup(environ[i]);
 	break;
 	}
 	}
@@ -146,7 +141,7 @@ int main(void)
 	char **toukenizado;
 	char separador[]=" ,\t\n";
 	//
-	char **evaluar_primer_argumento;
+	char *evaluar_primer_argumento;
 	//
 while (1)
 {
@@ -155,11 +150,17 @@ while (1)
 
         lectura = cargar_texto(buffer,len);
 		
-	toukenizado = toukenizar_lectura(lectura,separador);
-	
-	evaluar_primer_argumento = evaluar(toukenizado);		
+	toukenizado = toukenizar_lectura(lectura,separador);	
 
-	proceso_hijo(evaluar_primer_argumento);		
+	if(lectura[0]!='/')
+	{
+	evaluar_primer_argumento = evaluar(toukenizado[0]);
+	free(toukenizado[0]);
+	toukenizado[0] = NULL;
+	toukenizado[0] = evaluar_primer_argumento;
+	evaluar_primer_argumento = NULL;
+	}
+	proceso_hijo(toukenizado);		
 	
 }
 
