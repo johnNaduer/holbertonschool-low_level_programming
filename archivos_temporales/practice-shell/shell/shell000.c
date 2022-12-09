@@ -9,11 +9,11 @@
 char *cargar_texto(char *buf,size_t len);
 char **toukenizar_lectura(char *lectura, char separador[]);
 char *evaluar(char *primer_argumento);
-void proceso_hijo(char **evaluar_primer_argumento,char **av);
+void proceso_hijo(char **evaluar_primer_argumento);
 char *localizar_path();
 extern char **environ;
 char *localizar_path();
-int contar_separador(char *lectura, char sep);
+
 
 char *cargar_texto(char *buf,size_t len)
 {
@@ -29,15 +29,7 @@ char *cargar_texto(char *buf,size_t len)
 	
 	len_letra=strlen(buf);
 	buf[len_letra-1]='\0';
-
-
-	if(!strcmp(buf,"exit"))
-	{
 	
-		free(buf);
-		exit(EXIT_FAILURE);
-
-	}
 	return (buf);
 	free(buf);
 
@@ -51,9 +43,7 @@ char **toukenizar_lectura(char *lectura, char separador[])
 	char *tem;
 	char *token;
 	int i=0;
-	int n;
-	n = contar_separador(lectura,' ');
-	guardar_argumentos = malloc((n+1)*sizeof(char *));
+	guardar_argumentos = calloc(10,sizeof(char *));
 	token = strtok(lectura,separador);
 	
 	while(token!=NULL)
@@ -63,57 +53,37 @@ char **toukenizar_lectura(char *lectura, char separador[])
 	token = strtok(NULL,separador);
 	i++;
 	}
-	guardar_argumentos[i] = NULL;
+	
 	return (guardar_argumentos);
 }
 
-int contar_separador(char *lectura, char sep)
-{
-
-int n=0, i=0;
-while(lectura[i])
-{
-	if(lectura[i] == sep)
-	n++;
-i++;
-}
-n++;
-return (n);
-}
-
-
-void proceso_hijo(char **evaluar_primer_argumento,char **av)
+void proceso_hijo(char **evaluar_primer_argumento)
 {
 	pid_t child_pid;
-	int status;
+	
 	child_pid = fork();
 
+	if (child_pid == -1)
+        {
+                perror("Error:");
+                //return (1);
+        }
 
 	if (child_pid == 0)
 	{
 
 	if (execve(evaluar_primer_argumento[0],evaluar_primer_argumento,NULL) == -1)
 	{
-	printf("bash: %s: command not found\n",av[1]);
+	printf("bash: %s: command not found\n",evaluar_primer_argumento[0]);
 	free(evaluar_primer_argumento);
 	exit(EXIT_FAILURE);
                         //perror("Error:");
 	}	
 	}
-	
-	else if (child_pid == -1)
-        {
-                
-		free(evaluar_primer_argumento);
-		perror("Error:");
-                //return (1);
-        }
 
 	else
 	{
-		waitpid(-1, &status, 0);
-    		if (WIFEXITED(status))
-		WEXITSTATUS(status);
+		wait(NULL);                
 	}
 }
 
@@ -166,49 +136,31 @@ char *localizar_path()
 }
 
 
-void imprimir_env(void)
-{
-	int i;
-	
-	for (i = 0; environ[i] != NULL; i++)
-	{
-	printf("%s\n", environ[i]);
-    	}
-}
-
-
-int main(int ac __attribute__((unused)), char **av)
+int main(void)
 {
         char *lectura;
         char *buffer = NULL;
         size_t len = 0;
 	char **toukenizado;
-	char separador[]=" \t\n";
+	char separador[]=" ,\t\n";
 	//
 	char *evaluar_primer_argumento;
 	//
 while (1)
 {
 
-        printf("#cisfun$ ");
+        printf("$ ");
 
         lectura = cargar_texto(buffer,len);	
-	if (!strcmp(lectura,"env"))
-	{
-		imprimir_env();
-		free(lectura);
-		continue;
-	}
 	toukenizado = toukenizar_lectura(lectura,separador);
 	evaluar_primer_argumento = evaluar(toukenizado[0]);
 	toukenizado[0] = evaluar_primer_argumento;
 	evaluar_primer_argumento = NULL;
-	proceso_hijo(toukenizado,av);
+	proceso_hijo(toukenizado);
 	
 }
 
 free(lectura);
 
 return (0);
-
 }
