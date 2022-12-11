@@ -14,11 +14,16 @@ char *localizar_path();
 extern char **environ;
 char *localizar_path();
 int contar_separador(char *lectura, char sep);
-
+void free_argumentos(char **argu);
 char *cargar_texto(char *buf,size_t len)
 {
 	int len_letra;
-        size_t get_line;
+        size_t get_line, r_isatty = 0;
+	
+	r_isatty = isatty(STDIN_FILENO);
+	if (r_isatty == 1)
+		write(1, "#cisfun$ ", 9);
+	
 	get_line = getline(&buf,&len,stdin);
 
 	if(get_line == EOF)
@@ -44,9 +49,7 @@ char *cargar_texto(char *buf,size_t len)
 }
 
 char **toukenizar_lectura(char *lectura, char separador[])
-{
-
-	
+{	
 	char **guardar_argumentos;
 	char *tem;
 	char *token;
@@ -94,7 +97,7 @@ void proceso_hijo(char **evaluar_primer_argumento,char **av)
 
 	if (execve(evaluar_primer_argumento[0],evaluar_primer_argumento,NULL) == -1)
 	{
-	printf("bash: %s: command not found\n",av[1]);
+	printf("bash: %s: command not found\n",evaluar_primer_argumento[0]);
 	free(evaluar_primer_argumento);
 	exit(EXIT_FAILURE);
                         //perror("Error:");
@@ -104,7 +107,7 @@ void proceso_hijo(char **evaluar_primer_argumento,char **av)
 	else if (child_pid == -1)
         {
                 
-		free(evaluar_primer_argumento);
+		free_argumentos(evaluar_primer_argumento);
 		perror("Error:");
                 //return (1);
         }
@@ -114,6 +117,18 @@ void proceso_hijo(char **evaluar_primer_argumento,char **av)
 		waitpid(-1, &status, 0);
     		if (WIFEXITED(status))
 		WEXITSTATUS(status);
+		free_argumentos(evaluar_primer_argumento);
+	}
+
+
+}
+
+void free_argumentos(char **argu)
+{
+	int i;
+	for(i=0;argu[i]!=NULL;i++)
+	{
+		free(argu[i]);
 	}
 }
 
@@ -177,6 +192,16 @@ void imprimir_env(void)
 }
 
 
+void sig_handler(int signum)
+{
+
+	if(signum == SIGINT)
+	{
+		write(1, "\n#cisfun$ ",10);
+	}
+}
+
+
 int main(int ac __attribute__((unused)), char **av)
 {
         char *lectura;
@@ -189,9 +214,8 @@ int main(int ac __attribute__((unused)), char **av)
 	//
 while (1)
 {
-
-        printf("#cisfun$ ");
-
+	
+	signal(SIGINT, sig_handler);
         lectura = cargar_texto(buffer,len);	
 	if (!strcmp(lectura,"env"))
 	{
