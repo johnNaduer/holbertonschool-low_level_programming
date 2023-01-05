@@ -54,7 +54,9 @@ int binary_search(int *array, size_t size, int value)
 void print_array(int *array, int low, int high)
 {
 	int i;
+
 	printf("%d",array[low]);
+
 	for (i = low + 1; i <= high; i++)
 	{
 	printf(", %d", array[i]);
